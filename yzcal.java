@@ -116,10 +116,16 @@ public class yzcal {
     System.out.println("Event to be added:\n");
     System.out.println("BEGIN:VCALENDAR");
              sb.append("BEGIN:VCALENDAR\n");
-    System.out.println("PROID:-//Team Yangtze//yzcalendar 0.1 MIMEDIR//EN");
-             sb.append("PROID:-//Team Yangtze//yzcalendar 0.1 MIMEDIR//EN\n");
+    System.out.println("PROID:-//Team Yangtze//yzcalendar 0.1//EN");
+             sb.append("PROID:-//Team Yangtze//yzcalendar 0.1//EN\n");
     System.out.println("VERSION:1.0");
              sb.append("VERSION:1.0\n");
+    System.out.println("BEGIN:VTIMEZONE");
+             sb.append("BEGIN:VTIMEZONE\n");
+    System.out.println("TZID:"+tz.getID());  
+             sb.append("TZID:"+tz.getID()+"\n");
+    System.out.println("END:VTIMEZONE");
+             sb.append("END:VTIMEZONE\n");
     System.out.println("BEGIN:VEVENT");
              sb.append("BEGIN:VEVENT\n");
     System.out.println("DTSTART:"+date+"T"+startt+"00Z");
@@ -134,16 +140,11 @@ public class yzcal {
              sb.append("PRIORITY:"+priority+"\n");
     System.out.println("CLASS:"+classi);
              sb.append("CLASS:"+classi+"\n");
-    System.out.println("BEGIN:VTIMEZONE");
-             sb.append("BEGIN:VTIMEZONE\n");
-    System.out.println("TZID:"+tz.getID());  
-             sb.append("TZID:"+tz.getID()+"\n");  
-    System.out.println("END:VVENT");
-             sb.append("END:VVENT\n");
+    System.out.println("END:VEVENT");
+             sb.append("END:VEVENT\n");
     System.out.println("END:VCALENDAR");
              sb.append("END:VCALENDAR\n");
-    System.out.println("END:VTIMEZONE");
-             sb.append("END:VTIMEZONE\n");
+
     
     try
     {
