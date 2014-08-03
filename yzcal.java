@@ -18,8 +18,8 @@ public class yzcal {
     String recur;
     String classi;
     int clnum;
-    int endt;
-    int startt;
+    String endt;
+    String startt;
     int priority;
     TimeZone tz;
     BufferedWriter writer = null;
@@ -35,18 +35,40 @@ public class yzcal {
     
     System.out.println("Please enter a descriptive name for the new event");
     System.out.print("New Event: ");
-    summary = scanna.nextLine();
+    summary = scanna.nextLine().trim();
+    while(summary.length() == 0)
+    {
+      System.out.println("Invalid input: A description is required");
+      System.out.println("Please enter a descriptive name for the new event");
+      System.out.print("New Event: ");
+      summary = scanna.nextLine().trim();
+    }
     
     System.out.print("Please enter a location for the event: ");
-    locName = scanna.nextLine();
+    locName = scanna.nextLine().trim();
+    if(locName.length() == 0)
+    {
+      locName = "";
+    }
     
     System.out.println("\nPlease select a priority for the event.");
-    System.out.println("(Enter 1 for:) High Priority");
-    System.out.println("(Enter 2 for:) Normal Priority");
-    System.out.println("(Enter 3 for:) Low Priority");
+    System.out.println("(Enter 1 for:) High");
+    System.out.println("(Enter 2 for:) Normal");
+    System.out.println("(Enter 3 for:) Low");
     System.out.print("\nPriority: ");
     priority = scanna.nextInt();
     scanna.nextLine();
+    while(priority > 3 || priority < 1)
+    {
+      System.out.println("Invalid Selection");
+      System.out.println("\nPlease select a priority for the event.");
+      System.out.println("(Enter 1 for:) High");
+      System.out.println("(Enter 2 for:) Normal");
+      System.out.println("(Enter 3 for:) Low");
+      System.out.print("\nPriority: ");
+      priority = scanna.nextInt();
+      scanna.nextLine();
+    }
     if(priority == 2)
     {
       priority = 5;
@@ -56,24 +78,37 @@ public class yzcal {
        priority = 9;
     }
     
-   
-    /*System.out.println("Please enter a description of the event");
-    System.out.print("Event summary: ");
-    summary = scanna.nextLine();*/
-    
     System.out.println("Please enter the date of the event");
     System.out.print("(YYYYMMDD): ");
     date = scanna.nextLine();
+    while(!date.matches("[0-9]+") || date.length() != 8)
+    {
+      System.out.println("Invalid date");
+      System.out.print("date format YYYYMMDD:");
+      date = scanna.nextLine();
+    }
     
     System.out.println("Please enter the START time of the event");
     System.out.print("(24h format, i.e. 1500): ");
-    startt = scanna.nextInt();
+    startt = scanna.nextLine();
+    while(!startt.matches("[0-9]+")|| startt.length() < 4 || Integer.parseInt(startt) > 2400)
+    {
+      System.out.println("Invalid Time format");
+      System.out.print("(24h format, i.e. 1500): ");
+      startt = scanna.nextLine();
+    }
     
     System.out.println("Please enter the END time of the event");
     System.out.print("(24h format, i.e. 1500): ");
-    endt = scanna.nextInt();
+    endt = scanna.nextLine();
+    while(!endt.matches("[0-9]+")|| endt.length() < 4 || Integer.parseInt(endt) > 2400 || Integer.parseInt(endt) < Integer.parseInt(startt))
+    {
+      System.out.println("Invalid Time or format");
+      System.out.print("(24h format, i.e. 1500 and must be after Start Time): ");
+      endt = scanna.nextLine();
+    }
     
-    System.out.println("Is this event recurring? (y/n): ");
+    System.out.print("Is this event recurring? (y/n): ");
     recur = scanna.nextLine();
     if(recur == "y" || recur == "Y")
     {
@@ -84,11 +119,43 @@ public class yzcal {
        System.out.println("(4)Every Year");
        System.out.print("Your selection: ");
        rec2 = scanna.nextInt();
+       scanna.nextLine();
+       while(rec2 > 4 || rec2 < 1)
+       {
+         System.out.println("Invalid Selection");
+         System.out.println("Please choose a recurring event option");
+         System.out.println("(1)Every Day");
+         System.out.println("(2)Every Week");
+         System.out.println("(3)Every Month");
+         System.out.println("(4)Every Year");
+         System.out.print("Your selection: ");
+         rec2 = scanna.nextInt();
+         scanna.nextLine();
+       }
        
        System.out.println("Please enter the END date for the recurring event");
        System.out.print("(or enter 'n' to never end): ");
        recEnd = scanna.nextLine();
-       rec =1;
+       if(recEnd == "n" || recEnd == "N")
+       {
+         recEnd = "00000000";
+       }
+       while(!recEnd.matches("[0-9]+"))
+       {
+         System.out.println("Invalid date");
+         System.out.print("date format YYYYMMDD:");
+         recEnd = scanna.nextLine();
+       }
+       
+       rec = 1;
+    }
+    else if(recur == "n" || recur == "N")
+    {
+      System.out.println("One time event.");
+    }
+    else
+    {
+      System.out.println("Invalid input: Set to one time event.");
     }
     System.out.println("\nHow would you like to classify this event?");
     System.out.println("(1)Public");
@@ -97,6 +164,17 @@ public class yzcal {
     System.out.print("Your Selection: ");
     clnum = scanna.nextInt();
     scanna.nextLine();
+    while(clnum > 4 || clnum < 1)
+    {
+      System.out.println("Invalid Selection");
+      System.out.println("\nHow would you like to classify this event?");
+      System.out.println("(1)Public");
+      System.out.println("(2)Private");
+      System.out.println("(3)Confidential\n");
+      System.out.print("Your Selection: ");
+      clnum = scanna.nextInt();
+      scanna.nextLine();
+    }
     if(clnum == 3)
     {
       classi = "CONFIDENTIAL";
