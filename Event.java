@@ -18,8 +18,8 @@ public class Event {
     geopos = "none";
     priori = 0;
     summar = "none";
-    start = "00000000000000Z";
-    end = "00000000000000Z";
+    start = "0000";
+    end = "0000";
     tzi = "none";
     recur = "none";  
   }
