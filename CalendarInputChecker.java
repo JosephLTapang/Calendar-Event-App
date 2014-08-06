@@ -28,6 +28,17 @@ public class CalendarInputChecker {
 		else{
 			System.out.println("Incorrect");
 		}
+		
+		date = "20140929";
+		startt = "0000";
+		endt = "1000";
+		
+		if(checkValidTime(date,startt,endt)){
+			System.out.println("Correct");
+		}
+		else{
+			System.out.println("Incorrect");
+		}
 	}
 	public static boolean checkValidTime(String date, String startt, String endt){
     	if(!(checkValidDate(date))){
@@ -43,7 +54,7 @@ public class CalendarInputChecker {
     }
 	public static boolean checkValidDate(String date){//In form YYYYMMDD
     	String formattedDate;
-    	
+    	Date current = new Date();
     	
     	if(!date.matches("[0-9]+") || date.length() != 8)
         {
@@ -68,6 +79,10 @@ public class CalendarInputChecker {
 		 * the testDate is incorrect in some way. Ex 12/32/2014 becomes 1/1/2015*/
 		if(!(sdf.format(testDate).equals(formattedDate))){
 			System.out.println("The entered date was invalid.");
+			return false;
+		}
+		if(current.after(testDate)){
+			System.out.println("The entered date is older than the current date.");
 			return false;
 		}
 		return true;
