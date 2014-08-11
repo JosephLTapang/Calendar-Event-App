@@ -1,5 +1,9 @@
 import javax.swing.*;
 
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,11 +13,13 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class CalendarGUIMain extends JFrame implements ActionListener {
+public class icaltemp extends JFrame implements ActionListener {
   private JButton button1;
   private JLabel label1;
   private JLabel label2;
@@ -44,9 +50,14 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
   //Moved classification and priority variables to main scope
   private int pri;
   private String classi;
-
+  
+  //new variables for calendar module
+  private String formattedDate;
+  private Date startD;
+  private Date endD;
+  private JDatePickerImpl dPicker;
   // this constructor adds buttons, labels, and text fields
-  public CalendarGUIMain() {
+  public icaltemp() {
 
     setLayout(new GridLayout(0, 1));
 
@@ -60,10 +71,17 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
     textfield2 = new JTextField(15);
     add(textfield2);
 
-    label3 = new JLabel("YYYYMMDD");
+    /*label3 = new JLabel("YYYYMMDD");
     add(label3);
     textfield3 = new JTextField(15);
-    add(textfield3);
+    add(textfield3);*/
+    
+    label3 = new JLabel("Event Date");
+    UtilDateModel udm = new UtilDateModel();
+    JDatePanelImpl dPanel = new JDatePanelImpl(udm);
+    dPicker = new JDatePickerImpl(dPanel);
+    add(dPicker);
+    startD = (Date)dPicker.getModel().getValue();
 
     label4 = new JLabel("Event Time Start");
     add(label4);
@@ -155,7 +173,12 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 
     String locName = textfield2.getText();
     String summary = textfield1.getText();
-    String date = textfield3.getText();
+    //String date = textfield3.getText();
+    
+    startD = (Date)dPicker.getModel().getValue();
+    DateFormat df = new SimpleDateFormat("yyyyMMdd");
+    formattedDate = df.format(startD);
+    
     String recur;//
     int clnum;//
     String endt = textfield5.getText();
@@ -182,10 +205,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
     sb.append("END:VTIMEZONE\n");
     System.out.println("BEGIN:VEVENT");
     sb.append("BEGIN:VEVENT\n");
-    System.out.println("DTSTART:" + date + "T" + startt + "00Z");
-    sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
-    System.out.println("DTEND:" + date + "T" + endt + "00Z");
-    sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+    System.out.println("DTSTART:" + formattedDate + "T" + startt + "00Z");
+    sb.append("DTSTART:" + formattedDate + "T" + startt + "00Z\n");
+    System.out.println("DTEND:" + formattedDate + "T" + endt + "00Z");
+    sb.append("DTEND:" + formattedDate + "T" + endt + "00Z\n");
     System.out.println("LOCATION:" + locName);
     sb.append("LOCATION:" + locName + "\n");
     System.out.println("SUMMARY:" + summary);
@@ -244,7 +267,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
   public static void main(String args[]) {
     CalendarGUIMain gui = new CalendarGUIMain();
     gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    gui.setSize(400, 600);
+    gui.setSize(400, 620);
     gui.setVisible(true);
     gui.setTitle("Calendar Event Generator");
   }
