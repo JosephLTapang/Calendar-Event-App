@@ -69,12 +69,12 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		textfield3 = new JTextField(15);
 		add(textfield3);
 
-		label4 = new JLabel("Event Time Start");
+		label4 = new JLabel("Event Time Start (24hr)");
 		add(label4);
 		textfield4 = new JTextField(15);
 		add(textfield4);
 
-		label5 = new JLabel("Event Time End");
+		label5 = new JLabel("Event Time End (24hr)");
 		add(label5);
 		textfield5 = new JTextField(15);
 		add(textfield5);
