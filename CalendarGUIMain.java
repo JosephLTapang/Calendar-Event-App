@@ -64,7 +64,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		textfield2 = new JTextField(15);
 		add(textfield2);
 
-		label3 = new JLabel("YYYYMMDD");
+		label3 = new JLabel("Event Date (YYYYMMDD)");
 		add(label3);
 		textfield3 = new JTextField(15);
 		add(textfield3);
