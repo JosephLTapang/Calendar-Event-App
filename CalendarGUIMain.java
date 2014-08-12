@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.Locale;
 
 public class CalendarGUIMain extends JFrame implements ActionListener {
 	private JButton button1;
@@ -33,6 +34,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	private JRadioButton radioButton6;
 	private JRadioButton radioButton7;
 	private JRadioButton radioButton8;
+	private JRadioButton radioButton9;
+	private JRadioButton radioButton10;
+	private JRadioButton radioButton11;
 
 	private JTextField textfield1;
 	private JTextField textfield2;
@@ -40,9 +44,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	private JTextField textfield4;
 	private JTextField textfield5;
 
-	//Moved classification and priority variables to main scope
+	//Moved classification, recurrence, and priority variables to main scope
 	private int pri;
 	private String classi;
+	private String recur;
 
 	//Constructor adds buttons, labels, and text fields
 	public CalendarGUIMain() {
@@ -89,16 +94,23 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		//Recurring event related.
 		label7 = new JLabel("Recurring Event");
 		add(label7);
-		radioButton4 = new JRadioButton("YES");
-		radioButton5 = new JRadioButton("NO",true);
+		recur = "NOT RECURRING";
+		radioButton4 = new JRadioButton("NOT RECURRING", true);
+		radioButton5 = new JRadioButton("DAILY");
+		radioButton9 = new JRadioButton("WEEKLY");
+		radioButton10 = new JRadioButton("MONTHLY");
+		radioButton11 = new JRadioButton("YEARLY");
 		add(radioButton4);
 		add(radioButton5);
+		add(radioButton9);
+		add(radioButton10);
+		add(radioButton11);
 		groupButton2();
 
 		// public,private,confidential
 		label8 = new JLabel("Event Visibility");
 		add(label8);
-		classi = "Public";
+		classi = "DEFAULT";
 		radioButton6 = new JRadioButton("DEFAULT", true);
 		radioButton7 = new JRadioButton("PUBLIC");
 		radioButton8 = new JRadioButton("PRIVATE");
@@ -128,6 +140,16 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		ButtonGroup bg2 = new ButtonGroup();
 		bg2.add(radioButton4);
 		bg2.add(radioButton5);
+		bg2.add(radioButton9);
+		bg2.add(radioButton10);
+		bg2.add(radioButton11);
+		radioButton4.addItemListener(new HandlerClass3(radioButton4.getText()));
+		radioButton5.addItemListener(new HandlerClass3(radioButton5.getText()));
+		radioButton9.addItemListener(new HandlerClass3(radioButton9.getText()));
+		radioButton10.addItemListener(new HandlerClass3(radioButton10.getText()));
+		radioButton11.addItemListener(new HandlerClass3(radioButton11.getText()));
+
+
 	}
 
 	public void groupButton3() {
@@ -213,7 +235,6 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		String locName = textfield2.getText();
 		String summary = textfield1.getText();
 		String date = textfield3.getText();
-		String recur;
 		String endt = textfield5.getText();
 		String startt = textfield4.getText();
 		TimeZone tz;
@@ -249,52 +270,260 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(frame, "ERROR: Date precedes present.", "Date Input Error", JOptionPane.ERROR_MESSAGE);
 		}
 		else{
-			System.out.println("Event to be added:\n");
-			System.out.println("BEGIN:VCALENDAR");
-			sb.append("BEGIN:VCALENDAR\n");
-			System.out.println("PROID:-//Team Yangtze//yzcalendar 0.1//EN");
-			sb.append("PROID:-//Team Yangtze//yzcalendar 0.1//EN\n");
-			System.out.println("VERSION:1.0");
-			sb.append("VERSION:1.0\n");
-			System.out.println("BEGIN:VTIMEZONE");
-			sb.append("BEGIN:VTIMEZONE\n");
-			System.out.println("TZID:" + tz.getID());
-			sb.append("TZID:" + tz.getID() + "\n");
-			System.out.println("END:VTIMEZONE");
-			sb.append("END:VTIMEZONE\n");
-			System.out.println("BEGIN:VEVENT");
-			sb.append("BEGIN:VEVENT\n");
-			System.out.println("DTSTART:" + date + "T" + startt + "00Z");
-			sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
-			System.out.println("DTEND:" + date + "T" + endt + "00Z");
-			sb.append("DTEND:" + date + "T" + endt + "00Z\n");
-			System.out.println("LOCATION:" + locName);
-			sb.append("LOCATION:" + locName + "\n");
-			System.out.println("SUMMARY:" + summary);
-			sb.append("SUMMARY:" + summary + "\n");
-			System.out.println("PRIORITY:"+pri);
-			sb.append("PRIORITY:"+pri+"\n");
-			System.out.println("CLASS:"+classi);
-			sb.append("CLASS:"+classi+"\n");
-			System.out.println("END:VEVENT");
-			sb.append("END:VEVENT\n");
-			System.out.println("END:VCALENDAR");
-			sb.append("END:VCALENDAR\n");
 
-			// IOException error may not apply with text fields and buttons.
-			try {
-				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
-						"yangtze.ics"), "utf-8"));
-				writer.write(sb.toString());
-			} catch (IOException exception) {
-				System.out.println("Error writing to file");
-			} finally {
+			if(recur.equals("DAILY")){
+				System.out.println("Event to be added:\n");
+				System.out.println("BEGIN:VCALENDAR");
+				sb.append("BEGIN:VCALENDAR\n");
+				System.out.println("PROID:-//Team Yangtze//yzcalendar 0.1//EN");
+				sb.append("PROID:-//Team Yangtze//yzcalendar 0.1//EN\n");
+				System.out.println("VERSION:1.0");
+				sb.append("VERSION:1.0\n");
+				System.out.println("BEGIN:VTIMEZONE");
+				sb.append("BEGIN:VTIMEZONE\n");
+				System.out.println("TZID:" + tz.getID());
+				sb.append("TZID:" + tz.getID() + "\n");
+				System.out.println("END:VTIMEZONE");
+				sb.append("END:VTIMEZONE\n");
+				System.out.println("BEGIN:VEVENT");
+				sb.append("BEGIN:VEVENT\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
+				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00Z");
+				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("LOCATION:" + locName);
+				sb.append("LOCATION:" + locName + "\n");
+				System.out.println("SUMMARY:" + summary);
+				sb.append("SUMMARY:" + summary + "\n");
+				System.out.println("PRIORITY:"+pri);
+				sb.append("PRIORITY:"+pri+"\n");
+				System.out.println("CLASS:"+classi);
+				sb.append("CLASS:"+classi+"\n");
+				System.out.println("RRULE:FREQ="+recur);
+				sb.append("RRULE:FREQ="+recur+"\n");
+				System.out.println("END:VEVENT");
+				sb.append("END:VEVENT\n");
+				System.out.println("END:VCALENDAR");
+				sb.append("END:VCALENDAR\n");
+
+				// IOException error may not apply with text fields and buttons.
 				try {
-					writer.close();
-				} catch (Exception e2) {
+					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+							"yangtze.ics"), "utf-8"));
+					writer.write(sb.toString());
+				} catch (IOException exception) {
 					System.out.println("Error writing to file");
+				} finally {
+					try {
+						writer.close();
+					} catch (Exception e2) {
+						System.out.println("Error writing to file");
+					}
 				}
 			}
+			else if(recur.equals("WEEKLY")){
+				Calendar now = Calendar.getInstance();
+				Locale locale = Locale.getDefault();
+				String day = now.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale);
+				
+				System.out.println("Event to be added:\n");
+				System.out.println("BEGIN:VCALENDAR");
+				sb.append("BEGIN:VCALENDAR\n");
+				System.out.println("PROID:-//Team Yangtze//yzcalendar 0.1//EN");
+				sb.append("PROID:-//Team Yangtze//yzcalendar 0.1//EN\n");
+				System.out.println("VERSION:1.0");
+				sb.append("VERSION:1.0\n");
+				System.out.println("BEGIN:VTIMEZONE");
+				sb.append("BEGIN:VTIMEZONE\n");
+				System.out.println("TZID:" + tz.getID());
+				sb.append("TZID:" + tz.getID() + "\n");
+				System.out.println("END:VTIMEZONE");
+				sb.append("END:VTIMEZONE\n");
+				System.out.println("BEGIN:VEVENT");
+				sb.append("BEGIN:VEVENT\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
+				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00Z");
+				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("LOCATION:" + locName);
+				sb.append("LOCATION:" + locName + "\n");
+				System.out.println("SUMMARY:" + summary);
+				sb.append("SUMMARY:" + summary + "\n");
+				System.out.println("PRIORITY:"+pri);
+				sb.append("PRIORITY:"+pri+"\n");
+				System.out.println("CLASS:"+classi);
+				sb.append("CLASS:"+classi+"\n");
+				System.out.println("RRULE:FREQ="+recur+";"+"BYDAY="+day+"\n");
+				sb.append("RRULE:FREQ="+recur+";"+"BYDAY="+day+"\n");
+				System.out.println("END:VEVENT");
+				sb.append("END:VEVENT\n");
+				System.out.println("END:VCALENDAR");
+				sb.append("END:VCALENDAR\n");
+
+				// IOException error may not apply with text fields and buttons.
+				try {
+					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+							"yangtze.ics"), "utf-8"));
+					writer.write(sb.toString());
+				} catch (IOException exception) {
+					System.out.println("Error writing to file");
+				} finally {
+					try {
+						writer.close();
+					} catch (Exception e2) {
+						System.out.println("Error writing to file");
+					}
+				}
+			}
+			else if(recur.equals("MONTHLY")){
+				System.out.println("Event to be added:\n");
+				System.out.println("BEGIN:VCALENDAR");
+				sb.append("BEGIN:VCALENDAR\n");
+				System.out.println("PROID:-//Team Yangtze//yzcalendar 0.1//EN");
+				sb.append("PROID:-//Team Yangtze//yzcalendar 0.1//EN\n");
+				System.out.println("VERSION:1.0");
+				sb.append("VERSION:1.0\n");
+				System.out.println("BEGIN:VTIMEZONE");
+				sb.append("BEGIN:VTIMEZONE\n");
+				System.out.println("TZID:" + tz.getID());
+				sb.append("TZID:" + tz.getID() + "\n");
+				System.out.println("END:VTIMEZONE");
+				sb.append("END:VTIMEZONE\n");
+				System.out.println("BEGIN:VEVENT");
+				sb.append("BEGIN:VEVENT\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
+				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00Z");
+				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("LOCATION:" + locName);
+				sb.append("LOCATION:" + locName + "\n");
+				System.out.println("SUMMARY:" + summary);
+				sb.append("SUMMARY:" + summary + "\n");
+				System.out.println("PRIORITY:"+pri);
+				sb.append("PRIORITY:"+pri+"\n");
+				System.out.println("CLASS:"+classi);
+				sb.append("CLASS:"+classi+"\n");
+				System.out.println("RRULE:FREQ="+recur+";"+"BYMONTHDAY="+date.substring(6));
+				sb.append("RRULE:FREQ="+recur+"\n"+"BYMONTHDAY="+date.substring(6));
+				System.out.println("END:VEVENT");
+				sb.append("END:VEVENT\n");
+				System.out.println("END:VCALENDAR");
+				sb.append("END:VCALENDAR\n");
+
+				// IOException error may not apply with text fields and buttons.
+				try {
+					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+							"yangtze.ics"), "utf-8"));
+					writer.write(sb.toString());
+				} catch (IOException exception) {
+					System.out.println("Error writing to file");
+				} finally {
+					try {
+						writer.close();
+					} catch (Exception e2) {
+						System.out.println("Error writing to file");
+					}
+				}
+			}
+			else if(recur.equals("YEARLY")){
+				System.out.println("Event to be added:\n");
+				System.out.println("BEGIN:VCALENDAR");
+				sb.append("BEGIN:VCALENDAR\n");
+				System.out.println("PROID:-//Team Yangtze//yzcalendar 0.1//EN");
+				sb.append("PROID:-//Team Yangtze//yzcalendar 0.1//EN\n");
+				System.out.println("VERSION:1.0");
+				sb.append("VERSION:1.0\n");
+				System.out.println("BEGIN:VTIMEZONE");
+				sb.append("BEGIN:VTIMEZONE\n");
+				System.out.println("TZID:" + tz.getID());
+				sb.append("TZID:" + tz.getID() + "\n");
+				System.out.println("END:VTIMEZONE");
+				sb.append("END:VTIMEZONE\n");
+				System.out.println("BEGIN:VEVENT");
+				sb.append("BEGIN:VEVENT\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
+				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00Z");
+				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("LOCATION:" + locName);
+				sb.append("LOCATION:" + locName + "\n");
+				System.out.println("SUMMARY:" + summary);
+				sb.append("SUMMARY:" + summary + "\n");
+				System.out.println("PRIORITY:"+pri);
+				sb.append("PRIORITY:"+pri+"\n");
+				System.out.println("CLASS:"+classi);
+				sb.append("CLASS:"+classi+"\n");
+				System.out.println("RRULE:FREQ="+recur);
+				sb.append("RRULE:FREQ="+recur+"\n");
+				System.out.println("END:VEVENT");
+				sb.append("END:VEVENT\n");
+				System.out.println("END:VCALENDAR");
+				sb.append("END:VCALENDAR\n");
+
+				// IOException error may not apply with text fields and buttons.
+				try {
+					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+							"yangtze.ics"), "utf-8"));
+					writer.write(sb.toString());
+				} catch (IOException exception) {
+					System.out.println("Error writing to file");
+				} finally {
+					try {
+						writer.close();
+					} catch (Exception e2) {
+						System.out.println("Error writing to file");
+					}
+				}
+			}
+			else{
+				System.out.println("Event to be added:\n");
+				System.out.println("BEGIN:VCALENDAR");
+				sb.append("BEGIN:VCALENDAR\n");
+				System.out.println("PROID:-//Team Yangtze//yzcalendar 0.1//EN");
+				sb.append("PROID:-//Team Yangtze//yzcalendar 0.1//EN\n");
+				System.out.println("VERSION:1.0");
+				sb.append("VERSION:1.0\n");
+				System.out.println("BEGIN:VTIMEZONE");
+				sb.append("BEGIN:VTIMEZONE\n");
+				System.out.println("TZID:" + tz.getID());
+				sb.append("TZID:" + tz.getID() + "\n");
+				System.out.println("END:VTIMEZONE");
+				sb.append("END:VTIMEZONE\n");
+				System.out.println("BEGIN:VEVENT");
+				sb.append("BEGIN:VEVENT\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
+				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00Z");
+				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("LOCATION:" + locName);
+				sb.append("LOCATION:" + locName + "\n");
+				System.out.println("SUMMARY:" + summary);
+				sb.append("SUMMARY:" + summary + "\n");
+				System.out.println("PRIORITY:"+pri);
+				sb.append("PRIORITY:"+pri+"\n");
+				System.out.println("CLASS:"+classi);
+				sb.append("CLASS:"+classi+"\n");
+				System.out.println("END:VEVENT");
+				sb.append("END:VEVENT\n");
+				System.out.println("END:VCALENDAR");
+				sb.append("END:VCALENDAR\n");
+
+				// IOException error may not apply with text fields and buttons.
+				try {
+					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+							"yangtze.ics"), "utf-8"));
+					writer.write(sb.toString());
+				} catch (IOException exception) {
+					System.out.println("Error writing to file");
+				} finally {
+					try {
+						writer.close();
+					} catch (Exception e2) {
+						System.out.println("Error writing to file");
+					}
+				}
+			}
+			
 		}
 	}
 	//Private handler class for priority radio buttons
@@ -321,6 +550,18 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		@Override
 		public void itemStateChanged(ItemEvent event) {
 			classi = classification;
+
+		}
+	}
+	private class HandlerClass3 implements ItemListener
+	{
+		private String recurrence;
+		public HandlerClass3(String str){
+			recurrence = str;
+		}
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			recur = recurrence;
 
 		}
 	}
