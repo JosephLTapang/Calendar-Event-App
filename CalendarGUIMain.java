@@ -288,10 +288,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
-				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00Z");
-				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00");
+				sb.append("DTSTART:" + date + "T" + startt + "00\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00");
+				sb.append("DTEND:" + date + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
@@ -368,10 +368,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
-				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00Z");
-				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00");
+				sb.append("DTSTART:" + date + "T" + startt + "00\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00");
+				sb.append("DTEND:" + date + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
@@ -418,10 +418,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
-				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00Z");
-				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00");
+				sb.append("DTSTART:" + date + "T" + startt + "00\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00");
+				sb.append("DTEND:" + date + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
@@ -468,10 +468,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
-				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00Z");
-				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00");
+				sb.append("DTSTART:" + date + "T" + startt + "00\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00");
+				sb.append("DTEND:" + date + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
@@ -502,6 +502,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 					}
 				}
 			}
+		
 			else{
 				System.out.println("Event to be added:\n");
 				System.out.println("BEGIN:VCALENDAR");
@@ -518,10 +519,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00Z");
-				sb.append("DTSTART:" + date + "T" + startt + "00Z\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00Z");
-				sb.append("DTEND:" + date + "T" + endt + "00Z\n");
+				System.out.println("DTSTART:" + date + "T" + startt + "00");
+				sb.append("DTSTART:" + date + "T" + startt + "00\n");
+				System.out.println("DTEND:" + date + "T" + endt + "00");
+				sb.append("DTEND:" + date + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
