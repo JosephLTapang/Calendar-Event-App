@@ -206,8 +206,6 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 			testDate = sdf.parse(formattedDate);
 		}
 		catch(ParseException pe){
-			System.out.println("The entered date was invalid.");
-			System.out.println("ERROR 2");//Added to see which error occurred.
 			return 2;
 		}
 		System.out.println("sdf: " + sdf.format(testDate));
@@ -218,13 +216,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		 * the testDate is incorrect in some way. Ex 12/32/2014 becomes 1/1/2015*/
 
 		if(!(sdf.format(testDate).equals(formattedDate))){
-			System.out.println("The entered date was invalid.");
-			System.out.println("ERROR 3");//Added to see which error occurred.
 			return 3;
 		}	
 		if(current.after(testDate)){
-			System.out.println("The entered date is older than the current date.");
-			System.out.println("ERROR 4");//Added to see which error occurred.
 			return 4;
 		}
 		return 0;
