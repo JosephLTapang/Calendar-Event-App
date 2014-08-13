@@ -96,12 +96,12 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
     add(dPicker);
     startD = (Date)dPicker.getModel().getValue();
 
-		label4 = new JLabel("Event Time Start (24hr)");
+		label4 = new JLabel("Time Start (24hr)");
 		add(label4);
 		textfield4 = new JTextField(15);
 		add(textfield4);
 
-		label5 = new JLabel("Event Time End (24hr)");
+		label5 = new JLabel("Time End (24hr)");
 		add(label5);
 		textfield5 = new JTextField(15);
 		add(textfield5);
@@ -110,9 +110,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		label6 = new JLabel("Priority");
 		add(label6);
 		pri = 5;
-		radioButton1 = new JRadioButton("HIGH");
-		radioButton2 = new JRadioButton("NORMAL", true);
-		radioButton3 = new JRadioButton("LOW");
+		radioButton1 = new JRadioButton("High");
+		radioButton2 = new JRadioButton("Normal", true);
+		radioButton3 = new JRadioButton("Low");
 		add(radioButton1);
 		add(radioButton2);
 		add(radioButton3);
@@ -122,11 +122,11 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		label7 = new JLabel("Recurring Event");
 		add(label7);
 		recur = "NOT RECURRING";
-		radioButton4 = new JRadioButton("NOT RECURRING", true);
-		radioButton5 = new JRadioButton("DAILY");
-		radioButton9 = new JRadioButton("WEEKLY");
-		radioButton10 = new JRadioButton("MONTHLY");
-		radioButton11 = new JRadioButton("YEARLY");
+		radioButton4 = new JRadioButton("Not Recurring", true);
+		radioButton5 = new JRadioButton("Daily");
+		radioButton9 = new JRadioButton("Weekly");
+		radioButton10 = new JRadioButton("Monthly");
+		radioButton11 = new JRadioButton("Yearly");
 		add(radioButton4);
 		add(radioButton5);
 		add(radioButton9);
@@ -138,9 +138,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		label8 = new JLabel("Event Visibility");
 		add(label8);
 		classi = "PUBLIC";
-		radioButton6 = new JRadioButton("PUBLIC", true);
-		radioButton7 = new JRadioButton("PRIVATE");
-		radioButton8 = new JRadioButton("CONFIDENTIAL");
+		radioButton6 = new JRadioButton("Public", true);
+		radioButton7 = new JRadioButton("Private");
+		radioButton8 = new JRadioButton("Confidential");
 		add(radioButton6);
 		add(radioButton7);
 		add(radioButton8);
@@ -255,6 +255,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		String summary = textfield1.getText();
 		//String date = textfield3.getText();
 		
+		startD = new Date();
 		startD = (Date)dPicker.getModel().getValue();
     DateFormat df = new SimpleDateFormat("yyyyMMdd");
     formattedDate = df.format(startD);
@@ -264,10 +265,16 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		TimeZone tz;
 		StringBuilder sb;
 		BufferedWriter writer = null;
+		int locSet = 1;
 
 		tz = Calendar.getInstance().getTimeZone();
 		sb = new StringBuilder();
-
+		
+		if(locName.trim() == "")
+		{
+		  locSet = 0;
+		}
+		
 		//The following six conditionals provide pop ups for errors that can occur when the user is inputting time and dates.
 		if(checkValidTime2(startt) == false || checkValidTime2(endt) == false){
 			JFrame frame = new JFrame("");
@@ -293,6 +300,15 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 			JFrame frame = new JFrame("");
 			JOptionPane.showMessageDialog(frame, "ERROR: Date precedes present.", "Date Input Error", JOptionPane.ERROR_MESSAGE);
 		}
+    /*else if(formattedDate.trim() == ""){
+      JFrame frame = new JFrame("");
+      JOptionPane.showMessageDialog(frame, "ERROR: Date Required.", "Date Input Error", JOptionPane.ERROR_MESSAGE);
+    }
+		else if(startt.trim() == ""||endt.trim() == ""||summary.trim() == "")
+		{
+		  JFrame frame = new JFrame("");
+      JOptionPane.showMessageDialog(frame, "ERROR: Start Time, End Time, and Event Name are required", "Data Input Error", JOptionPane.ERROR_MESSAGE);
+		}*/
 		else{
 
 			//Creates a file with the users event and daily recurrence.
@@ -398,8 +414,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
 				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
 				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
-				System.out.println("LOCATION:" + locName);
-				sb.append("LOCATION:" + locName + "\n");
+				if(locSet == 1){
+  				System.out.println("LOCATION:" + locName);
+  				sb.append("LOCATION:" + locName + "\n");
+				  }
 				System.out.println("SUMMARY:" + summary);
 				sb.append("SUMMARY:" + summary + "\n");
 				System.out.println("PRIORITY:"+pri);
@@ -447,8 +465,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
 				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
 				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
-				System.out.println("LOCATION:" + locName);
-				sb.append("LOCATION:" + locName + "\n");
+        if(locSet == 1){
+          System.out.println("LOCATION:" + locName);
+          sb.append("LOCATION:" + locName + "\n");
+          }
 				System.out.println("SUMMARY:" + summary);
 				sb.append("SUMMARY:" + summary + "\n");
 				System.out.println("PRIORITY:"+pri);
@@ -496,8 +516,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
 				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
 				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
-				System.out.println("LOCATION:" + locName);
-				sb.append("LOCATION:" + locName + "\n");
+        if(locSet == 1){
+          System.out.println("LOCATION:" + locName);
+          sb.append("LOCATION:" + locName + "\n");
+          }
 				System.out.println("SUMMARY:" + summary);
 				sb.append("SUMMARY:" + summary + "\n");
 				System.out.println("PRIORITY:"+pri);
@@ -546,8 +568,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
 				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
 				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
-				System.out.println("LOCATION:" + locName);
-				sb.append("LOCATION:" + locName + "\n");
+        if(locSet == 1){
+          System.out.println("LOCATION:" + locName);
+          sb.append("LOCATION:" + locName + "\n");
+          }
 				System.out.println("SUMMARY:" + summary);
 				sb.append("SUMMARY:" + summary + "\n");
 				System.out.println("PRIORITY:"+pri);
