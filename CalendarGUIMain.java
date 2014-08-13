@@ -1,5 +1,13 @@
-import javax.swing.*;
+//////////////////////////////////////////////////////////////////////////
+//Project Name: CalendarGUIMain.java                                    //
+//Team Yangtze: Johnny Le, Christian Takemoto, Joseph Tapang            //
+//Date: 12Aug2014                                                       //
+//Description: CalendarGUIMain.java allows the user to input data       //
+//relating to events that they wish to save to a calendar program such  //
+//as Google Calendar.                                                   //
+//////////////////////////////////////////////////////////////////////////
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,9 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.Locale;
 
 public class CalendarGUIMain extends JFrame implements ActionListener {
+
 	private JButton button1;
 	private JLabel label1;
 	private JLabel label2;
@@ -26,6 +34,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	private JLabel label6;
 	private JLabel label7;
 	private JLabel label8;
+
 	private JRadioButton radioButton1;
 	private JRadioButton radioButton2;
 	private JRadioButton radioButton3;
@@ -44,12 +53,11 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	private JTextField textfield4;
 	private JTextField textfield5;
 
-	//Moved classification, recurrence, and priority variables to main scope
 	private int pri;
 	private String classi;
 	private String recur;
 
-	//Constructor adds buttons, labels, and text fields
+	//Constructor that adds buttons, labels, and text fields to the window.
 	public CalendarGUIMain() {
 
 		setLayout(new GridLayout(0, 1));
@@ -91,7 +99,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		add(radioButton3);
 		groupButton1();
 
-		//Recurring event related.
+		//Recurring events: Not recurring, daily, weekly, monthly, yearly.
 		label7 = new JLabel("Recurring Event");
 		add(label7);
 		recur = "NOT RECURRING";
@@ -107,7 +115,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		add(radioButton11);
 		groupButton2();
 
-		// public,private,confidential
+		//Classification: Public, Private, Confidential.
 		label8 = new JLabel("Event Visibility");
 		add(label8);
 		classi = "DEFAULT";
@@ -118,13 +126,12 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		add(radioButton7);
 		add(radioButton8);
 		groupButton3();
-
-		// Button to create file once previous inputs are filled.
+		
+		//Button that either creates a file or returns user input errors.
 		button1 = new JButton("Create .ics");
 		add(button1);
 		button1.addActionListener(this);// Button is listening for event.
 	}
-
 	//The following three methods group related radial buttons together.
 	public void groupButton1() {
 		ButtonGroup bg1 = new ButtonGroup();
@@ -135,7 +142,6 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		radioButton2.addItemListener(new HandlerClass(5));
 		radioButton3.addItemListener(new HandlerClass(9));
 	}
-
 	public void groupButton2() {
 		ButtonGroup bg2 = new ButtonGroup();
 		bg2.add(radioButton4);
@@ -148,10 +154,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		radioButton9.addItemListener(new HandlerClass3(radioButton9.getText()));
 		radioButton10.addItemListener(new HandlerClass3(radioButton10.getText()));
 		radioButton11.addItemListener(new HandlerClass3(radioButton11.getText()));
-
-
 	}
-
 	public void groupButton3() {
 		ButtonGroup bg3 = new ButtonGroup();
 		bg3.add(radioButton6);
@@ -161,8 +164,6 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		radioButton7.addItemListener(new HandlerClass2(radioButton7.getText()));
 		radioButton8.addItemListener(new HandlerClass2(radioButton8.getText()));
 	}
-
-
 	//Checks if users end time is after start time, if it is then return true, else return false.
 	//Compare startt and endt variables.
 	public boolean checkValidEndTime(String startTime, String endTime){
@@ -175,7 +176,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		}
 	}
 
-	//Checks valid time if user inputs time that is crazy then return false else return true.
+	//Checks valid time if user inputs time that is invalid then return false else return true.
 	public static boolean checkValidTime2(String userInput){
 		if(!userInput.matches("[0-9]+")|| userInput.length() < 4 || Integer.parseInt(userInput) > 2400)
 		{
@@ -185,8 +186,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 			return true;
 		}
 	}
-
-	public static int checkValidDate(String date){//In form YYYYMMDD
+	//Checks user input date for correct format such as: YYYYMMDD format, if the date is a future time or day,
+	//and if the user input an invalid day such as Feb 30. 
+	public static int checkValidDate(String date){
 		String formattedDate;
 		Date current = new Date();
 		System.out.println(current.toString());
@@ -196,35 +198,26 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		{
 			return 1;
 		}
-
 		formattedDate = date.substring(4, 6) + "/" + date.substring(6, 8) + "/" + date.substring(0, 4);// MM/DD/YYYY
-
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		Date testDate = null;
-
 		try{
 			testDate = sdf.parse(formattedDate);
 		}
 		catch(ParseException pe){
-			System.out.println("The entered date was invalid.");
-			System.out.println("ERROR 2");//Added to see which error occurred.
 			return 2;
 		}
 		System.out.println("sdf: " + sdf.format(testDate));
 		System.out.println("formattedDate: " + formattedDate);
 		System.out.println(testDate);
 		System.out.println(date);
-		/*If the sdf.format(testDate) returns a different String than formattedDate string, the formatted date put into
-		 * the testDate is incorrect in some way. Ex 12/32/2014 becomes 1/1/2015*/
+		//If the sdf.format(testDate) returns a different String than formattedDate string, the formatted date put into
+		//the testDate is incorrect in some way. Ex 12/32/2014 becomes 1/1/2015*/
 
 		if(!(sdf.format(testDate).equals(formattedDate))){
-			System.out.println("The entered date was invalid.");
-			System.out.println("ERROR 3");//Added to see which error occurred.
 			return 3;
-		}	
+		}       
 		if(current.after(testDate)){
-			System.out.println("The entered date is older than the current date.");
-			System.out.println("ERROR 4");//Added to see which error occurred.
 			return 4;
 		}
 		return 0;
@@ -244,8 +237,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		tz = Calendar.getInstance().getTimeZone();
 		sb = new StringBuilder();
 
-		//Following six conditionals provide pop ups for errors that can occur when the user is inputting time and dates.
-
+		//The following six conditionals provide pop ups for errors that can occur when the user is inputting time and dates.
 		if(checkValidTime2(startt) == false || checkValidTime2(endt) == false){
 			JFrame frame = new JFrame("");
 			JOptionPane.showMessageDialog(frame, "ERROR: Time format is 24hr HHMM", "Time Input Error", JOptionPane.ERROR_MESSAGE);
@@ -272,6 +264,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		}
 		else{
 
+			//Creates a file with the users event and daily recurrence.
 			if(recur.equals("DAILY")){
 				System.out.println("Event to be added:\n");
 				System.out.println("BEGIN:VCALENDAR");
@@ -306,8 +299,6 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VEVENT\n");
 				System.out.println("END:VCALENDAR");
 				sb.append("END:VCALENDAR\n");
-
-				// IOException error may not apply with text fields and buttons.
 				try {
 					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
 							"yangtze.ics"), "utf-8"));
@@ -322,14 +313,18 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 					}
 				}
 			}
+			//Creates a file with the users event and weekly recurrence.
 			else if(recur.equals("WEEKLY")){
+
 				Calendar userDate = Calendar.getInstance();
-				userDate.set(Integer.parseInt(date.substring(0,4)), Integer.parseInt(date.substring(4,6))-1,Integer.parseInt(date.substring(6)));// second argument is -1 since months in this classes array start from 0.
-				SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.E");
-				
+				userDate.set(Integer.parseInt(date.substring(0,4)), Integer.parseInt(date.substring(4,6))-1,Integer.parseInt(date.substring(6)));
+				SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.E");                    
 				String theDate = format.format(userDate.getTime());
 				String dayOfTheWeek = theDate.substring(8);
 				String shortDayOfTheWeek;
+
+				//Set of conditionals that abbreviate the input day of the week to DD format.This allows Google 
+				//calendar to recognize the day when determining the recurrence from the .ics file.
 				
 				if(dayOfTheWeek.equals("Sun")){
 					shortDayOfTheWeek = "SU";
@@ -352,7 +347,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				else{
 					shortDayOfTheWeek = "SA";
 				}
-			
+
 				System.out.println("Event to be added:\n");
 				System.out.println("BEGIN:VCALENDAR");
 				sb.append("BEGIN:VCALENDAR\n");
@@ -386,8 +381,6 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VEVENT\n");
 				System.out.println("END:VCALENDAR");
 				sb.append("END:VCALENDAR\n");
-
-				// IOException error may not apply with text fields and buttons.
 				try {
 					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
 							"yangtze.ics"), "utf-8"));
@@ -402,6 +395,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 					}
 				}
 			}
+			//Creates a file with the users event and monthly recurrence.
 			else if(recur.equals("MONTHLY")){
 				System.out.println("Event to be added:\n");
 				System.out.println("BEGIN:VCALENDAR");
@@ -436,8 +430,6 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VEVENT\n");
 				System.out.println("END:VCALENDAR");
 				sb.append("END:VCALENDAR\n");
-
-				// IOException error may not apply with text fields and buttons.
 				try {
 					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
 							"yangtze.ics"), "utf-8"));
@@ -452,6 +444,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 					}
 				}
 			}
+			//Creates a file with the users event and yearly recurrence.
 			else if(recur.equals("YEARLY")){
 				System.out.println("Event to be added:\n");
 				System.out.println("BEGIN:VCALENDAR");
@@ -486,8 +479,6 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VEVENT\n");
 				System.out.println("END:VCALENDAR");
 				sb.append("END:VCALENDAR\n");
-
-				// IOException error may not apply with text fields and buttons.
 				try {
 					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
 							"yangtze.ics"), "utf-8"));
@@ -502,8 +493,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 					}
 				}
 			}
-		
-			else{
+			//Creates a file with the users evet and no recurrence.
+			else
+			{
 				System.out.println("Event to be added:\n");
 				System.out.println("BEGIN:VCALENDAR");
 				sb.append("BEGIN:VCALENDAR\n");
@@ -535,8 +527,6 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VEVENT\n");
 				System.out.println("END:VCALENDAR");
 				sb.append("END:VCALENDAR\n");
-
-				// IOException error may not apply with text fields and buttons.
 				try {
 					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
 							"yangtze.ics"), "utf-8"));
@@ -550,11 +540,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 						System.out.println("Error writing to file");
 					}
 				}
-			}
-			
+			} 
 		}
 	}
-	//Private handler class for priority radio buttons
+	//Private handler class for priority radio buttons.
 	private class HandlerClass implements ItemListener
 	{
 		private int priority;
@@ -564,11 +553,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		@Override
 		public void itemStateChanged(ItemEvent event) {
 			pri = priority;
-
 		}
 	}
-
-	//Private handler class for classification radio buttons
+	//Private handler class for classification radio buttons.
 	private class HandlerClass2 implements ItemListener
 	{
 		private String classification;
@@ -578,9 +565,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		@Override
 		public void itemStateChanged(ItemEvent event) {
 			classi = classification;
-
 		}
 	}
+	//Private handler class for recurrence radio buttons.
 	private class HandlerClass3 implements ItemListener
 	{
 		private String recurrence;
@@ -590,9 +577,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		@Override
 		public void itemStateChanged(ItemEvent event) {
 			recur = recurrence;
-
 		}
 	}
+	//Main method begins.
 	public static void main(String args[]) {
 		CalendarGUIMain gui = new CalendarGUIMain();
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -600,4 +587,5 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		gui.setVisible(true);
 		gui.setTitle("Calendar Event Generator");
 	}
+	//Main method ends.
 }
