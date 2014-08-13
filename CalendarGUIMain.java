@@ -322,10 +322,36 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				}
 			}
 			else if(recur.equals("WEEKLY")){
-				Calendar now = Calendar.getInstance();
-				Locale locale = Locale.getDefault();
-				String day = now.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale);
+				Calendar userDate = Calendar.getInstance();
+				userDate.set(Integer.parseInt(date.substring(0,4)), Integer.parseInt(date.substring(4,6))-1,Integer.parseInt(date.substring(6)));// second argument is -1 since months in this classes array start from 0.
+				SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.E");
 				
+				String theDate = format.format(userDate.getTime());
+				String dayOfTheWeek = theDate.substring(8);
+				String shortDayOfTheWeek;
+				
+				if(dayOfTheWeek.equals("Sun")){
+					shortDayOfTheWeek = "SU";
+				}
+				else if(dayOfTheWeek.equals("Mon")){
+					shortDayOfTheWeek = "MO";
+				}
+				else if(dayOfTheWeek.equals("Tue")){
+					shortDayOfTheWeek = "TU";
+				}
+				else if(dayOfTheWeek.equals("Wed")){
+					shortDayOfTheWeek = "WE";
+				}
+				else if(dayOfTheWeek.equals("Thu")){
+					shortDayOfTheWeek = "TH";
+				}
+				else if(dayOfTheWeek.equals("Fri")){
+					shortDayOfTheWeek = "FR";
+				}
+				else{
+					shortDayOfTheWeek = "SA";
+				}
+			
 				System.out.println("Event to be added:\n");
 				System.out.println("BEGIN:VCALENDAR");
 				sb.append("BEGIN:VCALENDAR\n");
@@ -353,8 +379,8 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("PRIORITY:"+pri+"\n");
 				System.out.println("CLASS:"+classi);
 				sb.append("CLASS:"+classi+"\n");
-				System.out.println("RRULE:FREQ="+recur+";"+"BYDAY="+day+"\n");
-				sb.append("RRULE:FREQ="+recur+";"+"BYDAY="+day+"\n");
+				System.out.println("RRULE:FREQ="+recur+";"+"BYDAY="+shortDayOfTheWeek+"\n");
+				sb.append("RRULE:FREQ="+recur+";"+"BYDAY="+shortDayOfTheWeek+"\n");
 				System.out.println("END:VEVENT");
 				sb.append("END:VEVENT\n");
 				System.out.println("END:VCALENDAR");
