@@ -8,6 +8,11 @@
 //////////////////////////////////////////////////////////////////////////
 
 import javax.swing.*;
+
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +22,8 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.text.ParseException;
+import java.text.DateFormat;
+//import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,13 +55,18 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 
 	private JTextField textfield1;
 	private JTextField textfield2;
-	private JTextField textfield3;
+	//private JTextField textfield3;
 	private JTextField textfield4;
 	private JTextField textfield5;
 
 	private int pri;
 	private String classi;
 	private String recur;
+	
+	//new variables for calendar module
+  private String formattedDate;
+  private Date startD;
+  private JDatePickerImpl dPicker;
 
 	//Constructor that adds buttons, labels, and text fields to the window.
 	public CalendarGUIMain() {
@@ -72,10 +83,18 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		textfield2 = new JTextField(15);
 		add(textfield2);
 
-		label3 = new JLabel("Event Date (YYYYMMDD)");
+		/*label3 = new JLabel("Event Date (YYYYMMDD)");
 		add(label3);
 		textfield3 = new JTextField(15);
-		add(textfield3);
+		add(textfield3);*/
+		
+	  label3 = new JLabel("Event Date");
+	  add(label3);
+    UtilDateModel udm = new UtilDateModel();
+    JDatePanelImpl dPanel = new JDatePanelImpl(udm);
+    dPicker = new JDatePickerImpl(dPanel);
+    add(dPicker);
+    startD = (Date)dPicker.getModel().getValue();
 
 		label4 = new JLabel("Event Time Start (24hr)");
 		add(label4);
@@ -188,13 +207,20 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	}
 	//Checks user input date for correct format such as: YYYYMMDD format, if the date is a future time or day,
 	//and if the user input an invalid day such as Feb 30. 
-	public static int checkValidDate(String date){
-		String formattedDate;
+	public static int checkValidDate(Date eDate){
+		//String formattedDate;
 		Date current = new Date();
-		System.out.println(current.toString());
-		System.out.println(date.toString());
+		
+		if(eDate.compareTo(current)<0)
+		{
+		  return 1;
+		}
+		else
+		{
+		  return 0;
+		}
 
-		if(!date.matches("[0-9]+") || date.length() != 8)
+		/*if(!date.matches("[0-9]+") || date.length() != 8)
 		{
 			return 1;
 		}
@@ -212,7 +238,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		System.out.println(testDate);
 		System.out.println(date);
 		//If the sdf.format(testDate) returns a different String than formattedDate string, the formatted date put into
-		//the testDate is incorrect in some way. Ex 12/32/2014 becomes 1/1/2015*/
+		//the testDate is incorrect in some way. Ex 12/32/2014 becomes 1/1/2015
 
 		if(!(sdf.format(testDate).equals(formattedDate))){
 			return 3;
@@ -220,14 +246,19 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		if(current.after(testDate)){
 			return 4;
 		}
-		return 0;
+		return 0;*/
 	}
 	// Code relating to the creation of file after user is done and presses the
 	// button.
 	public void actionPerformed(ActionEvent e) {
 		String locName = textfield2.getText();
 		String summary = textfield1.getText();
-		String date = textfield3.getText();
+		//String date = textfield3.getText();
+		
+		startD = (Date)dPicker.getModel().getValue();
+    DateFormat df = new SimpleDateFormat("yyyyMMdd");
+    formattedDate = df.format(startD);
+		
 		String endt = textfield5.getText();
 		String startt = textfield4.getText();
 		TimeZone tz;
@@ -246,7 +277,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 			JFrame frame = new JFrame("");
 			JOptionPane.showMessageDialog(frame, "ERROR: End time is before start time.", "Time Input Error", JOptionPane.ERROR_MESSAGE);
 		}
-		else if(checkValidDate(date) == 1){
+		/*else if(checkValidDate(date) == 1){
 			JFrame frame = new JFrame("");
 			JOptionPane.showMessageDialog(frame, "ERROR: Date format is YYYYMMDD", "Date Input Error", JOptionPane.ERROR_MESSAGE);
 		}
@@ -257,8 +288,8 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		else if(checkValidDate(date) == 3){
 			JFrame frame = new JFrame("");
 			JOptionPane.showMessageDialog(frame, "ERROR: Invalid date, i.e. Feb 35th.", "Date Input Error", JOptionPane.ERROR_MESSAGE);
-		}
-		else if(checkValidDate(date) == 4){
+		}*/
+		else if(checkValidDate(startD) == 1){
 			JFrame frame = new JFrame("");
 			JOptionPane.showMessageDialog(frame, "ERROR: Date precedes present.", "Date Input Error", JOptionPane.ERROR_MESSAGE);
 		}
@@ -281,10 +312,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00");
-				sb.append("DTSTART:" + date + "T" + startt + "00\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00");
-				sb.append("DTEND:" + date + "T" + endt + "00\n");
+				System.out.println("DTSTART:" + formattedDate + "T" + startt + "00");
+				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
+				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
+				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
@@ -317,7 +348,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 			else if(recur.equals("WEEKLY")){
 
 				Calendar userDate = Calendar.getInstance();
-				userDate.set(Integer.parseInt(date.substring(0,4)), Integer.parseInt(date.substring(4,6))-1,Integer.parseInt(date.substring(6)));
+				userDate.set(Integer.parseInt(formattedDate.substring(0,4)), Integer.parseInt(formattedDate.substring(4,6))-1,Integer.parseInt(formattedDate.substring(6)));
 				SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.E");                    
 				String theDate = format.format(userDate.getTime());
 				String dayOfTheWeek = theDate.substring(8);
@@ -363,10 +394,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00");
-				sb.append("DTSTART:" + date + "T" + startt + "00\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00");
-				sb.append("DTEND:" + date + "T" + endt + "00\n");
+				System.out.println("DTSTART:" + formattedDate + "T" + startt + "00");
+				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
+				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
+				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
@@ -412,10 +443,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00");
-				sb.append("DTSTART:" + date + "T" + startt + "00\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00");
-				sb.append("DTEND:" + date + "T" + endt + "00\n");
+				System.out.println("DTSTART:" + formattedDate + "T" + startt + "00");
+				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
+				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
+				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
@@ -424,8 +455,8 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("PRIORITY:"+pri+"\n");
 				System.out.println("CLASS:"+classi);
 				sb.append("CLASS:"+classi+"\n");
-				System.out.println("RRULE:FREQ="+recur+";"+"BYMONTHDAY="+date.substring(6));
-				sb.append("RRULE:FREQ="+recur+"\n"+"BYMONTHDAY="+date.substring(6));
+				System.out.println("RRULE:FREQ="+recur+";"+"BYMONTHDAY="+formattedDate.substring(6));
+				sb.append("RRULE:FREQ="+recur+"\n"+"BYMONTHDAY="+formattedDate.substring(6));
 				System.out.println("END:VEVENT");
 				sb.append("END:VEVENT\n");
 				System.out.println("END:VCALENDAR");
@@ -461,10 +492,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00");
-				sb.append("DTSTART:" + date + "T" + startt + "00\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00");
-				sb.append("DTEND:" + date + "T" + endt + "00\n");
+				System.out.println("DTSTART:" + formattedDate + "T" + startt + "00");
+				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
+				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
+				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
@@ -493,7 +524,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 					}
 				}
 			}
-			//Creates a file with the users evet and no recurrence.
+			//Creates a file with the users event and no recurrence.
 			else
 			{
 				System.out.println("Event to be added:\n");
@@ -511,10 +542,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("END:VTIMEZONE\n");
 				System.out.println("BEGIN:VEVENT");
 				sb.append("BEGIN:VEVENT\n");
-				System.out.println("DTSTART:" + date + "T" + startt + "00");
-				sb.append("DTSTART:" + date + "T" + startt + "00\n");
-				System.out.println("DTEND:" + date + "T" + endt + "00");
-				sb.append("DTEND:" + date + "T" + endt + "00\n");
+				System.out.println("DTSTART:" + formattedDate + "T" + startt + "00");
+				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
+				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
+				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
 				System.out.println("LOCATION:" + locName);
 				sb.append("LOCATION:" + locName + "\n");
 				System.out.println("SUMMARY:" + summary);
@@ -583,7 +614,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	public static void main(String args[]) {
 		CalendarGUIMain gui = new CalendarGUIMain();
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setSize(400, 600);
+		gui.setSize(400, 700);
 		gui.setVisible(true);
 		gui.setTitle("Calendar Event Generator");
 	}
