@@ -23,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
-//import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,18 +54,17 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 
 	private JTextField textfield1;
 	private JTextField textfield2;
-	//private JTextField textfield3;
 	private JTextField textfield4;
 	private JTextField textfield5;
 
 	private int pri;
 	private String classi;
 	private String recur;
-	
+
 	//new variables for calendar module
-  private String formattedDate;
-  private Date startD;
-  private JDatePickerImpl dPicker;
+	private String formattedDate;
+	private Date startD;
+	private JDatePickerImpl dPicker;
 
 	//Constructor that adds buttons, labels, and text fields to the window.
 	public CalendarGUIMain() {
@@ -83,18 +81,13 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		textfield2 = new JTextField(15);
 		add(textfield2);
 
-		/*label3 = new JLabel("Event Date (YYYYMMDD)");
+		label3 = new JLabel("Event Date");
 		add(label3);
-		textfield3 = new JTextField(15);
-		add(textfield3);*/
-		
-	  label3 = new JLabel("Event Date");
-	  add(label3);
-    UtilDateModel udm = new UtilDateModel();
-    JDatePanelImpl dPanel = new JDatePanelImpl(udm);
-    dPicker = new JDatePickerImpl(dPanel);
-    add(dPicker);
-    startD = (Date)dPicker.getModel().getValue();
+		UtilDateModel udm = new UtilDateModel();
+		JDatePanelImpl dPanel = new JDatePanelImpl(udm);
+		dPicker = new JDatePickerImpl(dPanel);
+		add(dPicker);
+		startD = (Date)dPicker.getModel().getValue();
 
 		label4 = new JLabel("Time Start (24hr)");
 		add(label4);
@@ -145,12 +138,13 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		add(radioButton7);
 		add(radioButton8);
 		groupButton3();
-		
+
 		//Button that either creates a file or returns user input errors.
 		button1 = new JButton("Create .ics");
 		add(button1);
 		button1.addActionListener(this);// Button is listening for event.
 	}
+
 	//The following three methods group related radial buttons together.
 	public void groupButton1() {
 		ButtonGroup bg1 = new ButtonGroup();
@@ -208,58 +202,28 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	//Checks user input date for correct format such as: YYYYMMDD format, if the date is a future time or day,
 	//and if the user input an invalid day such as Feb 30. 
 	public static int checkValidDate(Date eDate){
-		//String formattedDate;
 		Date current = new Date();
-		
-		if(eDate.compareTo(current)<0)
-		{
-		  return 1;
-		}
-		else
-		{
-		  return 0;
-		}
 
-		/*if(!date.matches("[0-9]+") || date.length() != 8)
+		if(eDate.compareTo(current)<0)
 		{
 			return 1;
 		}
-		formattedDate = date.substring(4, 6) + "/" + date.substring(6, 8) + "/" + date.substring(0, 4);// MM/DD/YYYY
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-		Date testDate = null;
-		try{
-			testDate = sdf.parse(formattedDate);
+		else
+		{
+			return 0;
 		}
-		catch(ParseException pe){
-			return 2;
-		}
-		System.out.println("sdf: " + sdf.format(testDate));
-		System.out.println("formattedDate: " + formattedDate);
-		System.out.println(testDate);
-		System.out.println(date);
-		//If the sdf.format(testDate) returns a different String than formattedDate string, the formatted date put into
-		//the testDate is incorrect in some way. Ex 12/32/2014 becomes 1/1/2015
-
-		if(!(sdf.format(testDate).equals(formattedDate))){
-			return 3;
-		}       
-		if(current.after(testDate)){
-			return 4;
-		}
-		return 0;*/
 	}
 	// Code relating to the creation of file after user is done and presses the
 	// button.
 	public void actionPerformed(ActionEvent e) {
 		String locName = textfield2.getText();
 		String summary = textfield1.getText();
-		//String date = textfield3.getText();
-		
+
 		startD = new Date();
 		startD = (Date)dPicker.getModel().getValue();
-    DateFormat df = new SimpleDateFormat("yyyyMMdd");
-    formattedDate = df.format(startD);
-		
+		DateFormat df = new SimpleDateFormat("yyyyMMdd");
+		formattedDate = df.format(startD);
+
 		String endt = textfield5.getText();
 		String startt = textfield4.getText();
 		TimeZone tz;
@@ -269,12 +233,12 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 
 		tz = Calendar.getInstance().getTimeZone();
 		sb = new StringBuilder();
-		
+
 		if(locName.trim() == "")
 		{
-		  locSet = 0;
+			locSet = 0;
 		}
-		
+
 		//The following six conditionals provide pop ups for errors that can occur when the user is inputting time and dates.
 		if(checkValidTime2(startt) == false || checkValidTime2(endt) == false){
 			JFrame frame = new JFrame("");
@@ -284,31 +248,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 			JFrame frame = new JFrame("");
 			JOptionPane.showMessageDialog(frame, "ERROR: End time is before start time.", "Time Input Error", JOptionPane.ERROR_MESSAGE);
 		}
-		/*else if(checkValidDate(date) == 1){
-			JFrame frame = new JFrame("");
-			JOptionPane.showMessageDialog(frame, "ERROR: Date format is YYYYMMDD", "Date Input Error", JOptionPane.ERROR_MESSAGE);
-		}
-		else if(checkValidDate(date) == 2){
-			JFrame frame = new JFrame("");
-			JOptionPane.showMessageDialog(frame, "ERROR: Date format is YYYYMMDD", "Date Input Error", JOptionPane.ERROR_MESSAGE);
-		}
-		else if(checkValidDate(date) == 3){
-			JFrame frame = new JFrame("");
-			JOptionPane.showMessageDialog(frame, "ERROR: Invalid date, i.e. Feb 35th.", "Date Input Error", JOptionPane.ERROR_MESSAGE);
-		}*/
 		else if(checkValidDate(startD) == 1){
 			JFrame frame = new JFrame("");
 			JOptionPane.showMessageDialog(frame, "ERROR: Date precedes present.", "Date Input Error", JOptionPane.ERROR_MESSAGE);
 		}
-    /*else if(formattedDate.trim() == ""){
-      JFrame frame = new JFrame("");
-      JOptionPane.showMessageDialog(frame, "ERROR: Date Required.", "Date Input Error", JOptionPane.ERROR_MESSAGE);
-    }
-		else if(startt.trim() == ""||endt.trim() == ""||summary.trim() == "")
-		{
-		  JFrame frame = new JFrame("");
-      JOptionPane.showMessageDialog(frame, "ERROR: Start Time, End Time, and Event Name are required", "Data Input Error", JOptionPane.ERROR_MESSAGE);
-		}*/
 		else{
 
 			//Creates a file with the users event and daily recurrence.
@@ -372,7 +315,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 
 				//Set of conditionals that abbreviate the input day of the week to DD format.This allows Google 
 				//calendar to recognize the day when determining the recurrence from the .ics file.
-				
+
 				if(dayOfTheWeek.equals("Sun")){
 					shortDayOfTheWeek = "SU";
 				}
@@ -415,9 +358,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
 				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
 				if(locSet == 1){
-  				System.out.println("LOCATION:" + locName);
-  				sb.append("LOCATION:" + locName + "\n");
-				  }
+					System.out.println("LOCATION:" + locName);
+					sb.append("LOCATION:" + locName + "\n");
+				}
 				System.out.println("SUMMARY:" + summary);
 				sb.append("SUMMARY:" + summary + "\n");
 				System.out.println("PRIORITY:"+pri);
@@ -465,10 +408,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
 				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
 				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
-        if(locSet == 1){
-          System.out.println("LOCATION:" + locName);
-          sb.append("LOCATION:" + locName + "\n");
-          }
+				if(locSet == 1){
+					System.out.println("LOCATION:" + locName);
+					sb.append("LOCATION:" + locName + "\n");
+				}
 				System.out.println("SUMMARY:" + summary);
 				sb.append("SUMMARY:" + summary + "\n");
 				System.out.println("PRIORITY:"+pri);
@@ -516,10 +459,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
 				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
 				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
-        if(locSet == 1){
-          System.out.println("LOCATION:" + locName);
-          sb.append("LOCATION:" + locName + "\n");
-          }
+				if(locSet == 1){
+					System.out.println("LOCATION:" + locName);
+					sb.append("LOCATION:" + locName + "\n");
+				}
 				System.out.println("SUMMARY:" + summary);
 				sb.append("SUMMARY:" + summary + "\n");
 				System.out.println("PRIORITY:"+pri);
@@ -568,10 +511,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 				sb.append("DTSTART:" + formattedDate + "T" + startt + "00\n");
 				System.out.println("DTEND:" + formattedDate + "T" + endt + "00");
 				sb.append("DTEND:" + formattedDate + "T" + endt + "00\n");
-        if(locSet == 1){
-          System.out.println("LOCATION:" + locName);
-          sb.append("LOCATION:" + locName + "\n");
-          }
+				if(locSet == 1){
+					System.out.println("LOCATION:" + locName);
+					sb.append("LOCATION:" + locName + "\n");
+				}
 				System.out.println("SUMMARY:" + summary);
 				sb.append("SUMMARY:" + summary + "\n");
 				System.out.println("PRIORITY:"+pri);
@@ -619,7 +562,12 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		}
 		@Override
 		public void itemStateChanged(ItemEvent event) {
-			classi = classification;
+			if(classification.equals("Private")){
+				classi = "PRIVATE";
+			}
+			else if(classification.equals("Confidential")){
+				classi = "CONFIDENTIAL";
+			}
 		}
 	}
 	//Private handler class for recurrence radio buttons.
@@ -631,7 +579,18 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		}
 		@Override
 		public void itemStateChanged(ItemEvent event) {
-			recur = recurrence;
+			if(recurrence.equals("Daily")){
+				recur = "DAILY";
+			}
+			else if(recurrence.equals("Weekly")){
+				recur = "WEEKLY";
+			}
+			else if(recurrence.equals("Monthly")){
+				recur = "MONTHLY";
+			}
+			else if(recurrence.equals("Yearly")){
+				recur = "YEARLY";
+			}
 		}
 	}
 	//Main method begins.
