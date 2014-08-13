@@ -137,10 +137,10 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		//Classification: Public, Private, Confidential.
 		label8 = new JLabel("Event Visibility");
 		add(label8);
-		classi = "DEFAULT";
-		radioButton6 = new JRadioButton("DEFAULT", true);
-		radioButton7 = new JRadioButton("PUBLIC");
-		radioButton8 = new JRadioButton("PRIVATE");
+		classi = "PUBLIC";
+		radioButton6 = new JRadioButton("PUBLIC", true);
+		radioButton7 = new JRadioButton("PRIVATE");
+		radioButton8 = new JRadioButton("CONFIDENTIAL");
 		add(radioButton6);
 		add(radioButton7);
 		add(radioButton8);
