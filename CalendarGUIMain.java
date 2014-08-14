@@ -202,7 +202,12 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	//Checks user input date for correct format such as: YYYYMMDD format, if the date is a future time or day,
 	//and if the user input an invalid day such as Feb 30. 
 	public static int checkValidDate(Date eDate){
-		Date current = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.MINUTE,00);
+    cal.set(Calendar.SECOND,0);
+    cal.set(Calendar.MILLISECOND,0);
+    
+    Date current = cal.getTime();
 
 		if(eDate.compareTo(current)<0)
 		{
