@@ -26,6 +26,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 public class CalendarGUIMain extends JFrame implements ActionListener {
@@ -180,7 +181,7 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	//Checks if users end time is after start time, if it is then return true, else return false.
 	//Compare startt and endt variables.
 	public boolean checkValidEndTime(String startTime, String endTime){
-		if(!endTime.matches("[0-9]+")|| endTime.length() < 4 || Integer.parseInt(endTime) > 2400 || Integer.parseInt(endTime) < Integer.parseInt(startTime))
+		if(!endTime.matches("[0-9]+")|| endTime.length() < 4 || Integer.parseInt(endTime) > 2400 || Integer.parseInt(endTime) < Integer.parseInt(startTime)||Integer.parseInt(endTime) == Integer.parseInt(startTime))
 		{
 			return false;
 		}
@@ -201,14 +202,24 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 	}
 	//Checks user input date for correct format such as: YYYYMMDD format, if the date is a future time or day,
 	//and if the user input an invalid day such as Feb 30. 
-	public static int checkValidDate(Date eDate){
+  public static int checkValidDate(Date uDate, String st){
+    
     Calendar cal = Calendar.getInstance();
-    cal.set(Calendar.MINUTE,00);
     cal.set(Calendar.SECOND,0);
     cal.set(Calendar.MILLISECOND,0);
-    
     Date current = cal.getTime();
-
+    System.out.println("Current time is: " + current.toString());
+    
+    Calendar ecal = new GregorianCalendar();
+    ecal.setTime(uDate);
+    ecal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(st.substring(0,2)));
+    ecal.set(Calendar.MINUTE,Integer.parseInt(st.substring(2)));
+    ecal.set(Calendar.SECOND,0);
+    ecal.set(Calendar.MILLISECOND,0);
+    Date eDate = ecal.getTime();
+    
+    System.out.println("User time is: " + eDate.toString());
+    
 		if(eDate.compareTo(current)<0)
 		{
 			return 1;
@@ -251,9 +262,9 @@ public class CalendarGUIMain extends JFrame implements ActionListener {
 		}
 		else if(checkValidEndTime(startt, endt) == false){
 			JFrame frame = new JFrame("");
-			JOptionPane.showMessageDialog(frame, "ERROR: End time is before start time.", "Time Input Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, "ERROR: End time must be after Start time.", "Time Input Error", JOptionPane.ERROR_MESSAGE);
 		}
-		else if(checkValidDate(startD) == 1){
+		else if(checkValidDate(startD, startt) == 1){
 			JFrame frame = new JFrame("");
 			JOptionPane.showMessageDialog(frame, "ERROR: Date precedes present.", "Date Input Error", JOptionPane.ERROR_MESSAGE);
 		}
